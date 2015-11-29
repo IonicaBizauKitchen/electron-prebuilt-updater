@@ -14,7 +14,7 @@ const app = express()
 const github = new GitHubApi({
   version: '3.0.0',
   headers: {
-    'User-Agent': 'electron-prebuilt-updater'
+    'User-Agent': 'mustached-ironman-updater'
   }
 })
 const apiKey = process.env.API_KEY
@@ -35,7 +35,7 @@ app.post('/', function (req, res) {
 
   console.error('post body', JSON.stringify(req.body))
   console.error('post headers', JSON.stringify(req.headers))
-  
+
   if (req.body.release && signature === hubSignature) {
     let createReleaseAsync = Promise.promisify(github.releases.createRelease)
     let getContentAsync = Promise.promisify(github.repos.getContent)
@@ -113,7 +113,7 @@ app.post('/', function (req, res) {
 
         const publishAsync = Promise.promisify(npm.commands.publish)
         const viewAsync = Promise.promisify(npm.commands.view)
-        return viewAsync(['electron-prebuilt@latest'])
+        return viewAsync(['mustached-ironman@latest'])
         .catch(function (err) {
           console.error('Failed to get package info')
           throw err
@@ -129,7 +129,7 @@ app.post('/', function (req, res) {
           .then(function () {
             if (semver.gt(lastVersion, newVersion)) {
               const execSync = require('child_process').execSync
-              execSync(`${__dirname}/node_modules/.bin/npm dist-tags add electron-prebuilt@${lastVersion} latest`)
+              execSync(`${__dirname}/node_modules/.bin/npm dist-tags add mustached-ironman@${lastVersion} latest`)
             }
           })
         })
